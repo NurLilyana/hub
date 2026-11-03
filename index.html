@@ -1,0 +1,1138 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>TVETMARA Lumut | Login</title>
+
+    <style>
+        :root {
+            --navy: #03152e;
+            --blue: #006dff;
+            --cyan: #00e5ff;
+            --white: #f5fbff;
+            --muted: #bdd7f5;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Segoe UI", Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            color: var(--white);
+            background: var(--navy);
+            overflow-x: hidden;
+        }
+
+        /* CAMPUS BACKGROUND */
+
+        .background {
+            position: fixed;
+            inset: 0;
+            z-index: -3;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    rgba(2, 18, 45, 0.83),
+                    rgba(2, 24, 55, 0.35),
+                    rgba(2, 17, 43, 0.72)
+                ),
+                url("tvetmara-lumut.jpg");
+
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+
+            transform: scale(1.03);
+            animation: backgroundReveal 1.5s ease-out;
+        }
+
+        .background-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: -2;
+            pointer-events: none;
+
+            background:
+                linear-gradient(
+                    180deg,
+                    rgba(2, 16, 39, 0.35),
+                    transparent 45%,
+                    rgba(1, 12, 30, 0.7)
+                );
+        }
+
+        /* ANIMATED BLUEPRINT GRID */
+
+        .blueprint-grid {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            pointer-events: none;
+
+            background-image:
+                linear-gradient(
+                    rgba(0, 205, 255, 0.09) 1px,
+                    transparent 1px
+                ),
+                linear-gradient(
+                    90deg,
+                    rgba(0, 205, 255, 0.09) 1px,
+                    transparent 1px
+                );
+
+            background-size: 48px 48px;
+            animation: gridFlow 28s linear infinite;
+
+            mask-image: linear-gradient(
+                to bottom,
+                black,
+                transparent 95%
+            );
+        }
+
+        /* DECORATIVE SCANNING LIGHTS */
+
+        .light-line {
+            position: fixed;
+            width: 2px;
+            height: 180px;
+            top: -200px;
+            left: 12%;
+            z-index: -1;
+            pointer-events: none;
+
+            background: linear-gradient(
+                transparent,
+                var(--cyan),
+                transparent
+            );
+
+            opacity: 0.7;
+            animation: scan 8s linear infinite;
+        }
+
+        .light-line.second {
+            left: 83%;
+            height: 240px;
+            animation-delay: 3s;
+        }
+
+        @keyframes scan {
+            from {
+                transform: translateY(0);
+            }
+
+            to {
+                transform: translateY(130vh);
+            }
+        }
+
+        @keyframes gridFlow {
+            from {
+                background-position: 0 0, 0 0;
+            }
+
+            to {
+                background-position: 48px 48px, 48px 48px;
+            }
+        }
+
+        @keyframes backgroundReveal {
+            from {
+                opacity: 0;
+                transform: scale(1.1);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1.03);
+            }
+        }
+
+        /* TOP HEADER */
+
+        .topbar {
+            min-height: 105px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+
+            padding: 20px 5%;
+            border-bottom: 1px solid rgba(0, 229, 255, 0.35);
+
+            background: rgba(2, 17, 42, 0.73);
+            backdrop-filter: blur(12px);
+
+            clip-path: polygon(
+                0 0, 100% 0, 100% 80%,
+                96% 100%, 0 100%
+            );
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .brand-logo {
+            width: 58px;
+            height: 58px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border: 2px solid var(--cyan);
+            border-radius: 12px;
+
+            color: var(--cyan);
+            font-size: 20px;
+            font-weight: 900;
+
+            background: rgba(0, 105, 255, 0.17);
+            box-shadow: 0 0 18px rgba(0, 229, 255, 0.18);
+        }
+
+        .brand-name {
+            font-size: 23px;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+        }
+
+        .brand-location {
+            margin-top: 4px;
+            color: var(--cyan);
+            font-size: 12px;
+            letter-spacing: 4px;
+            text-align: center;
+        }
+
+        .top-tagline {
+            color: var(--muted);
+            font-size: 11px;
+            letter-spacing: 3px;
+            text-align: center;
+        }
+
+        /* MUSIC CONTROL */
+
+        .music-control {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+
+            padding: 12px 16px;
+            border: 1px solid rgba(0, 229, 255, 0.5);
+            border-radius: 12px;
+
+            background: rgba(2, 20, 48, 0.85);
+            box-shadow: 0 0 20px rgba(0, 100, 255, 0.12);
+        }
+
+        .music-icon {
+            width: 40px;
+            height: 40px;
+            flex-shrink: 0;
+
+            display: grid;
+            place-items: center;
+
+            background: rgba(0, 109, 255, 0.3);
+            border: 1px solid var(--cyan);
+            border-radius: 50%;
+
+            color: var(--cyan);
+            font-size: 21px;
+        }
+
+        .music-text {
+            min-width: 100px;
+        }
+
+        .music-text strong {
+            display: block;
+            font-size: 12px;
+        }
+
+        .music-text small {
+            display: block;
+            margin-top: 4px;
+            color: var(--cyan);
+            font-size: 10px;
+        }
+
+        .music-button {
+            padding: 9px 12px;
+            border: 1px solid var(--cyan);
+            border-radius: 7px;
+
+            background: rgba(0, 109, 255, 0.22);
+            color: white;
+
+            cursor: pointer;
+            font-size: 12px;
+            transition: 0.3s;
+        }
+
+        .music-button:hover {
+            background: var(--blue);
+            box-shadow: 0 0 15px rgba(0, 229, 255, 0.4);
+        }
+
+        /* MAIN CONTENT */
+
+        .main-content {
+            width: min(1400px, 92%);
+            min-height: calc(100vh - 190px);
+            margin: 0 auto;
+
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            align-items: center;
+            gap: 50px;
+
+            padding: 50px 0;
+        }
+
+        /* LEFT INFORMATION PANEL */
+
+        .intro {
+            animation: slideLeft 1s ease both;
+        }
+
+        .eyebrow {
+            color: var(--cyan);
+            font-size: 14px;
+            letter-spacing: 5px;
+            margin-bottom: 18px;
+        }
+
+        .intro h1 {
+            max-width: 700px;
+            font-size: clamp(36px, 5vw, 67px);
+            line-height: 1.05;
+            font-weight: 900;
+            letter-spacing: 1px;
+            text-shadow: 0 4px 25px rgba(0, 0, 0, 0.35);
+        }
+
+        .intro h1 span {
+            color: var(--cyan);
+            text-shadow: 0 0 22px rgba(0, 229, 255, 0.3);
+        }
+
+        .system-title {
+            margin-top: 20px;
+            padding-bottom: 18px;
+            border-bottom: 2px solid var(--cyan);
+
+            color: #dceeff;
+            font-size: clamp(14px, 1.8vw, 21px);
+            letter-spacing: 4px;
+            line-height: 1.7;
+        }
+
+        .intro-description {
+            max-width: 470px;
+            margin-top: 22px;
+
+            color: #e3f1ff;
+            font-size: 16px;
+            line-height: 1.8;
+        }
+
+        /* CAMPUS LABEL */
+
+        .campus-label {
+            display: inline-block;
+            margin-top: 32px;
+            padding: 10px 15px;
+
+            border-left: 3px solid var(--cyan);
+            background: rgba(2, 18, 43, 0.55);
+
+            color: #d9efff;
+            font-size: 11px;
+            letter-spacing: 2px;
+        }
+
+        /* LOGIN PANEL */
+
+        .login-panel {
+            position: relative;
+            width: 100%;
+            max-width: 510px;
+            justify-self: end;
+
+            padding: 32px;
+
+            border: 1px solid rgba(0, 229, 255, 0.8);
+            border-radius: 15px;
+
+            background: rgba(2, 19, 46, 0.88);
+            backdrop-filter: blur(18px);
+
+            box-shadow:
+                0 0 0 5px rgba(0, 100, 255, 0.06),
+                0 20px 65px rgba(0, 0, 0, 0.4),
+                0 0 35px rgba(0, 140, 255, 0.15);
+
+            animation: slideRight 1s ease both;
+        }
+
+        .login-panel::before,
+        .login-panel::after {
+            content: "";
+            position: absolute;
+            width: 45px;
+            height: 4px;
+            background: var(--cyan);
+            box-shadow: 0 0 15px var(--cyan);
+        }
+
+        .login-panel::before {
+            top: -2px;
+            left: 25px;
+        }
+
+        .login-panel::after {
+            right: 25px;
+            bottom: -2px;
+        }
+
+        /* STUDENT AND ADMIN TABS */
+
+        .login-tabs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+
+            margin-bottom: 30px;
+            border: 1px solid rgba(0, 160, 255, 0.6);
+            border-radius: 9px;
+            overflow: hidden;
+        }
+
+        .tab {
+            min-height: 76px;
+            padding: 12px;
+
+            border: none;
+            background: rgba(0, 20, 49, 0.7);
+
+            color: #c4ddf8;
+            font-size: 14px;
+
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .tab span {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 24px;
+        }
+
+        .tab.active {
+            background: linear-gradient(135deg, #00bde9, #0069ff);
+            color: white;
+
+            box-shadow: inset 0 0 18px rgba(255, 255, 255, 0.14);
+        }
+
+        .tab:hover:not(.active) {
+            background: rgba(0, 100, 255, 0.22);
+        }
+
+        /* LOGIN FORM */
+
+        .form-title {
+            font-size: 29px;
+            margin-bottom: 8px;
+        }
+
+        .form-subtitle {
+            color: var(--cyan);
+            font-size: 13px;
+            margin-bottom: 27px;
+        }
+
+        .form-group {
+            margin-bottom: 19px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 9px;
+
+            color: #d9eaff;
+            font-size: 13px;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-wrapper input {
+            width: 100%;
+            height: 52px;
+            padding: 0 45px 0 15px;
+
+            border: 1px solid rgba(0, 160, 255, 0.65);
+            border-radius: 8px;
+            outline: none;
+
+            background: rgba(1, 14, 36, 0.8);
+            color: white;
+
+            font-size: 14px;
+            transition: 0.3s;
+        }
+
+        .input-wrapper input::placeholder {
+            color: #91b9e5;
+        }
+
+        .input-wrapper input:focus {
+            border-color: var(--cyan);
+            box-shadow: 0 0 0 3px rgba(0, 229, 255, 0.12);
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+
+            border: none;
+            background: transparent;
+
+            color: var(--cyan);
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .login-button {
+            width: 100%;
+            min-height: 54px;
+            margin-top: 8px;
+
+            border: 1px solid rgba(0, 229, 255, 0.85);
+            border-radius: 8px;
+
+            background: linear-gradient(110deg, #00bfe9, #0061ff);
+            color: white;
+
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: 1px;
+
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .login-button:hover {
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 8px 25px rgba(0, 110, 255, 0.35),
+                0 0 18px rgba(0, 229, 255, 0.2);
+        }
+
+        .login-note {
+            margin-top: 22px;
+            color: #b9d5f3;
+            text-align: center;
+            font-size: 11px;
+            line-height: 1.8;
+        }
+
+        .message {
+            margin-top: 15px;
+            color: #ffb7b7;
+            text-align: center;
+            font-size: 13px;
+        }
+
+        /* FOOTER */
+
+        .footer {
+            min-height: 65px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+
+            padding: 15px 5%;
+            border-top: 1px solid rgba(0, 229, 255, 0.4);
+
+            background: rgba(1, 12, 30, 0.88);
+            color: #c8e0fb;
+            font-size: 11px;
+        }
+
+        .footer strong {
+            display: block;
+            color: white;
+            margin-bottom: 5px;
+            letter-spacing: 1px;
+        }
+
+        .footer-quote {
+            color: var(--cyan);
+            letter-spacing: 1px;
+            text-align: center;
+        }
+
+        /* ENTRY ANIMATIONS */
+
+        @keyframes slideLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-35px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideRight {
+            from {
+                opacity: 0;
+                transform: translateX(35px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* TABLET */
+
+        @media (max-width: 1000px) {
+            .top-tagline {
+                display: none;
+            }
+
+            .main-content {
+                grid-template-columns: 1fr;
+                max-width: 650px;
+                gap: 40px;
+            }
+
+            .login-panel {
+                justify-self: center;
+            }
+
+            .intro {
+                text-align: center;
+            }
+
+            .intro-description {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .system-title {
+                border-bottom: none;
+            }
+
+            .campus-label {
+                margin-top: 20px;
+            }
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 600px) {
+            .topbar {
+                padding: 15px 5%;
+                flex-wrap: wrap;
+            }
+
+            .brand-logo {
+                width: 45px;
+                height: 45px;
+                font-size: 16px;
+            }
+
+            .brand-name {
+                font-size: 17px;
+            }
+
+            .brand-location {
+                font-size: 10px;
+            }
+
+            .music-control {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .main-content {
+                width: 90%;
+                padding: 35px 0;
+            }
+
+            .intro h1 {
+                font-size: 37px;
+            }
+
+            .eyebrow {
+                font-size: 11px;
+                letter-spacing: 3px;
+            }
+
+            .system-title {
+                font-size: 13px;
+                letter-spacing: 2px;
+            }
+
+            .intro-description {
+                font-size: 14px;
+            }
+
+            .login-panel {
+                padding: 22px 18px;
+            }
+
+            .form-title {
+                font-size: 25px;
+            }
+
+            .footer {
+                flex-direction: column;
+                text-align: center;
+                gap: 10px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                scroll-behavior: auto !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- BACKGROUND -->
+    <div class="background"></div>
+    <div class="background-overlay"></div>
+    <div class="blueprint-grid"></div>
+    <div class="light-line"></div>
+    <div class="light-line second"></div>
+
+    <!-- HEADER -->
+    <header class="topbar">
+
+        <div class="brand">
+            <div class="brand-logo">&lt;/&gt;</div>
+
+            <div>
+                <div class="brand-name">TVETMARA</div>
+                <div class="brand-location">LUMUT</div>
+            </div>
+        </div>
+
+        <div class="top-tagline">
+            SKILLED TODAY &nbsp; • &nbsp; COMPETENT TOMORROW
+        </div>
+
+        <div class="music-control">
+            <div class="music-icon">♫</div>
+
+            <div class="music-text">
+                <strong>Background Music</strong>
+                <small>Sky High · Instrumental</small>
+            </div>
+
+            <button
+                type="button"
+                id="musicButton"
+                class="music-button"
+                onclick="toggleMusic()"
+                aria-pressed="false">
+                ▶ Play
+            </button>
+        </div>
+
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+        <!-- LEFT SIDE -->
+        <section class="intro">
+
+            <p class="eyebrow">WELCOME TO</p>
+
+            <h1>
+                TVETMARA
+                <span>LUMUT</span>
+            </h1>
+
+            <p class="system-title">
+                COMPLAINT MANAGEMENT SYSTEM
+            </p>
+
+            <p class="intro-description">
+                Your voice matters. We're here to listen,
+                resolve and build a better campus together.
+                Help us make TVETMARA Lumut a better place
+                for everyone.
+            </p>
+
+            <!-- Submit Complaints, Track Progress and Better Service removed -->
+
+            <div class="campus-label">
+                DIGITAL CAMPUS SYSTEM &nbsp; // &nbsp; LUMUT, PERAK
+            </div>
+
+        </section>
+
+        <!-- RIGHT SIDE: LOGIN -->
+        <section class="login-panel">
+
+            <div class="login-tabs">
+
+                <button
+                    type="button"
+                    class="tab active"
+                    id="studentTab"
+                    onclick="showStudentLogin()">
+
+                    <span>♙</span>
+                    Student
+                </button>
+
+                <button
+                    type="button"
+                    class="tab"
+                    id="adminTab"
+                    onclick="showAdminLogin()">
+
+                    <span>♧</span>
+                    Admin
+                </button>
+
+            </div>
+
+            <!-- STUDENT LOGIN -->
+            <form id="studentForm" action="home.html" method="POST">
+
+                <h2 class="form-title">Student Login</h2>
+
+                <p class="form-subtitle">
+                    Access your student account
+                </p>
+
+                <div class="form-group">
+                    <label for="studentEmail">Email Address</label>
+
+                    <div class="input-wrapper">
+                        <input
+                            type="email"
+                            id="studentEmail"
+                            name="email"
+                            placeholder="Enter your email"
+                            autocomplete="username"
+                            required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="studentPassword">Password</label>
+
+                    <div class="input-wrapper">
+                        <input
+                            type="password"
+                            id="studentPassword"
+                            name="password"
+                            placeholder="Enter your password"
+                            autocomplete="current-password"
+                            required>
+
+                        <button
+                            type="button"
+                            class="toggle-password"
+                            onclick="togglePassword('studentPassword', this)">
+                            Show
+                        </button>
+                    </div>
+                </div>
+
+                <button type="submit" class="login-button">
+                    → &nbsp; Login as Student
+                </button>
+
+            </form>
+
+            <!-- ADMIN LOGIN -->
+            <form
+    id="adminForm"
+    action="admin-login.php"
+    method="POST"
+    style="display: none;">
+
+                <h2 class="form-title">Admin Login</h2>
+
+                <p class="form-subtitle">
+                    Access the administration portal
+                </p>
+
+                <div class="form-group">
+                    <label for="adminUsername">Username</label>
+
+                    <div class="input-wrapper">
+                        <input
+                            type="text"
+                            id="adminUsername"
+                            name="admin_username"
+                            placeholder="Enter your username"
+                            autocomplete="username"
+                            disabled
+                            required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="adminPassword">Password</label>
+
+                    <div class="input-wrapper">
+                        <input
+                            type="password"
+                            id="adminPassword"
+                            name="admin_password"
+                            placeholder="Enter your password"
+                            autocomplete="current-password"
+                            disabled
+                            required>
+
+                        <button
+                            type="button"
+                            class="toggle-password"
+                            onclick="togglePassword('adminPassword', this)">
+                            Show
+                        </button>
+                    </div>
+                </div>
+
+                <button type="submit" class="login-button">
+                    → &nbsp; Login as Admin
+                </button>
+
+            </form>
+
+            <p id="message" class="message" aria-live="polite"></p>
+
+            <p class="login-note">
+                Need assistance with your account?<br>
+                Please contact the campus administration.
+            </p>
+
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+
+        <div>
+            <strong>TVETMARA LUMUT</strong>
+            Complaint Management System
+        </div>
+
+        <div class="footer-quote">
+            "Together for a Better Campus"
+        </div>
+
+        <div>
+            LUMUT, PERAK · MALAYSIA
+        </div>
+
+    </footer>
+
+    <!-- BACKGROUND MUSIC -->
+    <audio id="backgroundMusic" loop preload="auto">
+        <source src="sky-high.mp3" type="audio/mpeg">
+        Your browser does not support audio.
+    </audio>
+
+    <script>
+        // STUDENT LOGIN TAB
+        function showStudentLogin() {
+            document.getElementById("studentForm").style.display = "block";
+            document.getElementById("adminForm").style.display = "none";
+
+            document.getElementById("studentTab").classList.add("active");
+            document.getElementById("adminTab").classList.remove("active");
+
+            document.getElementById("studentEmail").disabled = false;
+            document.getElementById("studentPassword").disabled = false;
+
+            document.getElementById("adminUsername").disabled = true;
+            document.getElementById("adminPassword").disabled = true;
+
+            document.getElementById("message").textContent = "";
+        }
+
+        // ADMIN LOGIN TAB
+        function showAdminLogin() {
+            document.getElementById("studentForm").style.display = "none";
+            document.getElementById("adminForm").style.display = "block";
+
+            document.getElementById("adminTab").classList.add("active");
+            document.getElementById("studentTab").classList.remove("active");
+
+            document.getElementById("studentEmail").disabled = true;
+            document.getElementById("studentPassword").disabled = true;
+
+            document.getElementById("adminUsername").disabled = false;
+            document.getElementById("adminPassword").disabled = false;
+
+            document.getElementById("message").textContent = "";
+        }
+
+        // SHOW OR HIDE PASSWORD
+        function togglePassword(inputId, button) {
+            const passwordInput = document.getElementById(inputId);
+
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                button.textContent = "Hide";
+            } else {
+                passwordInput.type = "password";
+                button.textContent = "Show";
+            }
+        }
+
+        // BACKGROUND MUSIC
+        const backgroundMusic = document.getElementById("backgroundMusic");
+        const musicButton = document.getElementById("musicButton");
+
+        const MUSIC_TIME_KEY = "tvetmaraMusicTime";
+        const MUSIC_STATE_KEY = "tvetmaraMusicPlaying";
+
+        backgroundMusic.volume = 0.2;
+
+        function updateMusicButton() {
+            const isPlaying = !backgroundMusic.paused;
+
+            musicButton.textContent = isPlaying ? "Ⅱ Pause" : "▶ Play";
+
+            musicButton.setAttribute(
+                "aria-pressed",
+                String(isPlaying)
+            );
+        }
+
+        // SAVE MUSIC POSITION
+        backgroundMusic.addEventListener("timeupdate", function () {
+            if (Number.isFinite(backgroundMusic.currentTime)) {
+                sessionStorage.setItem(
+                    MUSIC_TIME_KEY,
+                    String(backgroundMusic.currentTime)
+                );
+            }
+        });
+
+        // SAVE POSITION WHEN LEAVING THE PAGE
+        window.addEventListener("pagehide", function () {
+            if (Number.isFinite(backgroundMusic.currentTime)) {
+                sessionStorage.setItem(
+                    MUSIC_TIME_KEY,
+                    String(backgroundMusic.currentTime)
+                );
+            }
+        });
+
+        // RESTORE MUSIC POSITION
+        backgroundMusic.addEventListener("loadedmetadata", async function () {
+            const savedTime = Number(
+                sessionStorage.getItem(MUSIC_TIME_KEY) || 0
+            );
+
+            if (
+                Number.isFinite(backgroundMusic.duration) &&
+                backgroundMusic.duration > 0
+            ) {
+                backgroundMusic.currentTime =
+                    savedTime % backgroundMusic.duration;
+            }
+
+            if (sessionStorage.getItem(MUSIC_STATE_KEY) !== "false") {
+                try {
+                    await backgroundMusic.play();
+                } catch (error) {
+                    console.log("Browser autoplay was blocked.");
+                }
+            }
+
+            updateMusicButton();
+        }, { once: true });
+
+        // PLAY OR PAUSE MUSIC
+        async function toggleMusic() {
+            if (backgroundMusic.paused) {
+                try {
+                    await backgroundMusic.play();
+
+                    sessionStorage.setItem(
+                        MUSIC_STATE_KEY,
+                        "true"
+                    );
+                } catch (error) {
+                    console.log("Unable to play music.", error);
+                }
+            } else {
+                backgroundMusic.pause();
+
+                sessionStorage.setItem(
+                    MUSIC_STATE_KEY,
+                    "false"
+                );
+            }
+
+            updateMusicButton();
+        }
+
+        backgroundMusic.addEventListener("play", updateMusicButton);
+        backgroundMusic.addEventListener("pause", updateMusicButton);
+
+        // TRY AUTOPLAY WHEN PAGE LOADS
+        window.addEventListener("load", async function () {
+            if (sessionStorage.getItem(MUSIC_STATE_KEY) === "false") {
+                updateMusicButton();
+                return;
+            }
+
+            try {
+                await backgroundMusic.play();
+            } catch (error) {
+                // The user can press Play if autoplay is blocked.
+            }
+
+            updateMusicButton();
+        });
+
+        // INITIAL TAB STATE
+        showStudentLogin();
+    </script>
+
+</body>
+</html>
