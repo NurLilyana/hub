@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Campus Gallery | TVETMARA Lumut</title>
+
+    <style>
+        :root {
+            --black: #05090f;
+            --navy: #081421;
+            --cyan: #00e5ff;
+            --cyan-soft: #b8f8ff;
+            --panel: rgba(5, 12, 21, 0.90);
+            --text: #eefcff;
+            --muted: #a7c4d0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: Arial, Helvetica, sans-serif;
+            color: var(--text);
+            background: var(--black);
+            overflow-x: hidden;
+        }
+
+        /* ANIMATED BACKGROUND */
+
+        .background-grid {
+            position: fixed;
+            inset: 0;
+            z-index: -3;
+            background:
+                linear-gradient(rgba(0, 229, 255, 0.055) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 229, 255, 0.055) 1px, transparent 1px),
+                radial-gradient(ellipse at top, #102d43 0%, #07111e 48%, #03060b 100%);
+            background-size: 45px 45px, 45px 45px, cover;
+            animation: gridMove 18s linear infinite;
+        }
+
+        .background-glow {
+            position: fixed;
+            inset: -50%;
+            z-index: -2;
+            pointer-events: none;
+            background:
+                radial-gradient(circle at 25% 35%,
+                    rgba(0, 229, 255, 0.15), transparent 25%),
+                radial-gradient(circle at 75% 65%,
+                    rgba(0, 110, 255, 0.12), transparent 28%);
+            animation: glowMove 12s ease-in-out infinite alternate;
+        }
+
+        .light-beam {
+            position: fixed;
+            top: -30%;
+            left: -40%;
+            width: 35%;
+            height: 160%;
+            z-index: -1;
+            pointer-events: none;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(0, 229, 255, 0.035),
+                transparent
+            );
+            transform: rotate(25deg);
+            animation: beamMove 14s linear infinite;
+        }
+
+        .floating-symbols {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .symbol {
+            position: absolute;
+            color: rgba(0, 229, 255, 0.13);
+            font-family: monospace;
+            font-size: 25px;
+            animation: floatUp 16s linear infinite;
+        }
+
+        .symbol:nth-child(1) {
+            left: 8%;
+            top: 90%;
+            animation-delay: 0s;
+        }
+
+        .symbol:nth-child(2) {
+            left: 25%;
+            top: 100%;
+            animation-delay: 4s;
+        }
+
+        .symbol:nth-child(3) {
+            left: 53%;
+            top: 95%;
+            animation-delay: 2s;
+        }
+
+        .symbol:nth-child(4) {
+            left: 76%;
+            top: 100%;
+            animation-delay: 7s;
+        }
+
+        .symbol:nth-child(5) {
+            left: 90%;
+            top: 95%;
+            animation-delay: 10s;
+        }
+
+        @keyframes gridMove {
+            from { background-position: 0 0, 0 0, center; }
+            to { background-position: 45px 45px, 45px 45px, center; }
+        }
+
+        @keyframes glowMove {
+            from { transform: translate(-3%, -2%) scale(1); }
+            to { transform: translate(3%, 2%) scale(1.08); }
+        }
+
+        @keyframes beamMove {
+            from { left: -40%; }
+            to { left: 130%; }
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0;
+            }
+            15% { opacity: 1; }
+            85% { opacity: 0.8; }
+            100% {
+                transform: translateY(-120vh) rotate(180deg);
+                opacity: 0;
+            }
+        }
+
+        /* NAVIGATION BAR */
+
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(3, 9, 16, 0.92);
+            border-bottom: 1px solid rgba(0, 229, 255, 0.35);
+            backdrop-filter: blur(12px);
+        }
+
+        .navbar {
+            width: min(1200px, 92%);
+            min-height: 76px;
+            margin: auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .brand {
+            color: var(--cyan);
+            font-size: 19px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-decoration: none;
+            text-shadow: 0 0 14px rgba(0, 229, 255, 0.35);
+        }
+
+        .nav-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 22px;
+        }
+
+        .nav-links a {
+            color: var(--muted);
+            font-size: 14px;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--cyan);
+            text-shadow: 0 0 10px rgba(0, 229, 255, 0.65);
+        }
+
+        /* MAIN CONTENT */
+
+        main {
+            width: min(1200px, 92%);
+            margin: auto;
+            padding: 65px 0 45px;
+        }
+
+        .intro {
+            text-align: center;
+            margin-bottom: 42px;
+            animation: fadeIn 1s ease both;
+        }
+
+        .small-label {
+            display: inline-block;
+            padding: 8px 15px;
+            margin-bottom: 18px;
+            border: 1px solid rgba(0, 229, 255, 0.45);
+            border-radius: 30px;
+            color: var(--cyan);
+            background: rgba(0, 229, 255, 0.06);
+            font-size: 12px;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        h1 {
+            margin-bottom: 17px;
+            font-size: clamp(32px, 5vw, 52px);
+            line-height: 1.15;
+            letter-spacing: 1px;
+        }
+
+        h1 span {
+            color: var(--cyan);
+            text-shadow: 0 0 24px rgba(0, 229, 255, 0.38);
+        }
+
+        .intro p {
+            max-width: 720px;
+            margin: auto;
+            color: var(--muted);
+            font-size: 16px;
+            line-height: 1.8;
+        }
+
+        .instruction {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            max-width: 680px;
+            margin: 0 auto 35px;
+            padding: 15px 18px;
+            border: 1px solid rgba(0, 229, 255, 0.23);
+            border-radius: 12px;
+            background: rgba(0, 229, 255, 0.055);
+            color: var(--cyan-soft);
+            text-align: center;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .instruction .icon {
+            font-size: 24px;
+        }
+
+        /* GALLERY CARDS */
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 22px;
+        }
+
+        .place-card {
+            position: relative;
+            display: block;
+            min-width: 0;
+            overflow: hidden;
+            border: 1px solid rgba(0, 229, 255, 0.25);
+            border-radius: 17px;
+            background: var(--panel);
+            color: var(--text);
+            text-decoration: none;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+            transition:
+                transform 0.35s ease,
+                border-color 0.35s ease,
+                box-shadow 0.35s ease;
+            animation: cardAppear 0.7s ease both;
+        }
+
+        .place-card:nth-child(2) { animation-delay: 0.08s; }
+        .place-card:nth-child(3) { animation-delay: 0.16s; }
+        .place-card:nth-child(4) { animation-delay: 0.24s; }
+        .place-card:nth-child(5) { animation-delay: 0.32s; }
+        .place-card:nth-child(6) { animation-delay: 0.40s; }
+        .place-card:nth-child(7) { animation-delay: 0.48s; }
+        .place-card:nth-child(8) { animation-delay: 0.56s; }
+
+        .place-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--cyan);
+            box-shadow:
+                0 0 0 1px rgba(0, 229, 255, 0.15),
+                0 0 28px rgba(0, 229, 255, 0.16);
+        }
+
+        .image-container {
+            position: relative;
+            height: 190px;
+            overflow: hidden;
+            background:
+                radial-gradient(circle at top, #123b50, #081421 75%);
+        }
+
+        .image-container img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.55s ease, opacity 0.3s ease;
+        }
+
+        .place-card:hover .image-container img {
+            transform: scale(1.08);
+        }
+
+        .image-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                to top,
+                rgba(3, 9, 16, 0.82),
+                transparent 65%
+            );
+            pointer-events: none;
+        }
+
+        .place-number {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            display: grid;
+            place-items: center;
+            width: 34px;
+            height: 34px;
+            border: 1px solid rgba(0, 229, 255, 0.65);
+            border-radius: 9px;
+            background: rgba(3, 9, 16, 0.8);
+            color: var(--cyan);
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .place-content {
+            padding: 17px;
+        }
+
+        .place-content h2 {
+            margin-bottom: 9px;
+            color: var(--cyan-soft);
+            font-size: 17px;
+            line-height: 1.4;
+        }
+
+        .place-content p {
+            min-height: 40px;
+            margin-bottom: 17px;
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .select-place {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(0, 229, 255, 0.17);
+            color: var(--cyan);
+            font-size: 12px;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+        }
+
+        .arrow {
+            font-size: 19px;
+            transition: transform 0.3s ease;
+        }
+
+        .place-card:hover .arrow {
+            transform: translateX(5px);
+        }
+
+        /* BOTTOM INFORMATION */
+
+        .bottom-note {
+            margin-top: 40px;
+            padding: 24px;
+            border: 1px solid rgba(0, 229, 255, 0.2);
+            border-radius: 14px;
+            background: rgba(5, 12, 21, 0.75);
+            text-align: center;
+        }
+
+        .bottom-note h2 {
+            margin-bottom: 10px;
+            color: var(--cyan);
+            font-size: 19px;
+        }
+
+        .bottom-note p {
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        footer {
+            padding: 24px 15px;
+            border-top: 1px solid rgba(0, 229, 255, 0.18);
+            color: var(--muted);
+            text-align: center;
+            font-size: 12px;
+            line-height: 1.8;
+        }
+
+        footer span {
+            color: var(--cyan);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(18px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes cardAppear {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* TABLET */
+
+        @media (max-width: 1000px) {
+            .gallery-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .image-container {
+                height: 220px;
+            }
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 600px) {
+            .navbar {
+                padding: 16px 0;
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .nav-links {
+                gap: 14px;
+            }
+
+            .nav-links a {
+                font-size: 13px;
+            }
+
+            main {
+                padding-top: 42px;
+            }
+
+            .gallery-grid {
+                grid-template-columns: 1fr;
+                gap: 18px;
+            }
+
+            .image-container {
+                height: 230px;
+            }
+
+            .place-content p {
+                min-height: auto;
+            }
+        }
+
+        /* REDUCE MOTION IF REQUESTED BY THE DEVICE */
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                scroll-behavior: auto !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+        
+    <!-- BACKGROUND MUSIC -->
+    <audio id="backgroundMusic" loop>
+        <source src="sky-high.mp3" type="audio/mpeg">
+        Your browser does not support audio playback.
+    </audio>
+
+    <button
+        id="musicButton"
+        type="button"
+        style="
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 9999;
+            padding: 12px 18px;
+            background: #05090f;
+            color: #00e5ff;
+            border: 1px solid #00e5ff;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+        "
+    >
+        ♫ Play Music
+    </button>
+
+    <script>
+        const music = document.getElementById("backgroundMusic");
+        const button = document.getElementById("musicButton");
+
+        music.volume = 0.3;
+
+        function updateButton() {
+            button.textContent = music.paused
+                ? "♫ Play Music"
+                : "♫ Pause Music";
+        }
+
+        // Restore the previous playback position.
+        const savedTime = sessionStorage.getItem("skyHighTime");
+        const wasPlaying = sessionStorage.getItem("skyHighPlaying");
+
+        music.addEventListener("loadedmetadata", async function () {
+            if (savedTime !== null) {
+                const time = Number(savedTime);
+
+                if (Number.isFinite(time) && time >= 0) {
+                    music.currentTime = Math.min(
+                        time,
+                        Math.max(0, music.duration - 0.1)
+                    );
+                }
+            }
+
+            if (wasPlaying === "true") {
+                try {
+                    await music.play();
+                } catch (error) {
+                    // The browser may require a click to start playback.
+                }
+            }
+
+            updateButton();
+        });
+
+        music.addEventListener("timeupdate", function () {
+            sessionStorage.setItem("skyHighTime", music.currentTime);
+        });
+
+        window.addEventListener("pagehide", function () {
+            sessionStorage.setItem("skyHighTime", music.currentTime);
+            sessionStorage.setItem(
+                "skyHighPlaying",
+                String(!music.paused)
+            );
+        });
+
+        button.addEventListener("click", async function () {
+            if (music.paused) {
+                try {
+                    await music.play();
+                    sessionStorage.setItem("skyHighPlaying", "true");
+                } catch (error) {
+                    alert("Music could not play. Please check that sky-high.mp3 exists in your website folder.");
+                }
+            } else {
+                music.pause();
+                sessionStorage.setItem("skyHighPlaying", "false");
+            }
+
+            updateButton();
+        });
+
+        music.addEventListener("play", updateButton);
+        music.addEventListener("pause", updateButton);
+    </script>
+
+
+
+
+    <!-- Animated background -->
+    <div class="background-grid"></div>
+    <div class="background-glow"></div>
+    <div class="light-beam"></div>
+
+    <div class="floating-symbols" aria-hidden="true">
+        <span class="symbol">&lt;/&gt;</span>
+        <span class="symbol">{ }</span>
+        <span class="symbol">01</span>
+        <span class="symbol">&lt;?&gt;</span>
+        <span class="symbol">#</span>
+    </div>
+
+    <!-- Navigation -->
+    <header>
+        <nav class="navbar">
+            <a href="home.html" class="brand">
+                TVETMARA LUMUT
+            </a>
+
+            <div class="nav-links">
+                <a href="home.html">Home</a>
+                <a href="campus-gallery.html" class="active">Campus Gallery</a>
+                <a href="my-complaints.html">My Complaints</a>
+                <a href="index.html">Log Out</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main gallery -->
+    <main>
+
+        <section class="intro">
+            <span class="small-label">CAMPUS • EXPLORE • REPORT</span>
+
+            <h1>
+                Explore Our <span>Campus</span>
+            </h1>
+
+            <p>
+                Welcome to the TVETMARA Lumut Campus Gallery.
+                Select a location below to view the place and submit
+                a complaint about a problem in that area.
+            </p>
+        </section>
+
+        <div class="instruction">
+            <span class="icon">⌖</span>
+            <span>
+                Click any picture to open the complaint form
+                with your selected campus location.
+            </span>
+        </div>
+
+        <section class="gallery-grid" aria-label="Campus locations">
+
+            <!-- 1. Dormitory -->
+            <a class="place-card"
+               href="complaint.html?location=Dormitory%20%2F%20Hostel">
+
+                <div class="image-container">
+                    <img src="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 250'><defs><pattern id='p' width='38' height='34' patternUnits='userSpaceOnUse' x='52' y='87'><rect width='23' height='22' fill='%2378aad2'/></pattern></defs><rect width='400' height='250' fill='%2398c4e8'/><rect x='0' y='190' width='400' height='60' fill='%23598c50'/><rect x='40' y='75' width='320' height='115' fill='%23e1d7c3'/><rect x='40' y='65' width='320' height='12' fill='%23963c32'/><rect x='52' y='87' width='304' height='102' fill='url(%23p)'/><rect x='185' y='150' width='30' height='40' fill='%236e4628'/></svg>"
+                         alt="Dormitory"
+                         loading="lazy"
+                         onerror="this.style.display='none'">
+
+                    <div class="image-overlay"></div>
+                    <span class="place-number">01</span>
+                </div>
+
+                <div class="place-content">
+                    <h2>Dormitory</h2>
+                    <p>
+                        Student accommodation, rooms and hostel facilities.
+                    </p>
+                    <div class="select-place">
+                        <span>REPORT A PROBLEM</span>
+                        <span class="arrow">→</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- 2. Lecture Hall -->
+            <a class="place-card"
+               href="complaint.html?location=Lecture%20Hall">
+
+                <div class="image-container">
+                    <img src="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 250'><defs><pattern id='p' width='68' height='22' patternUnits='userSpaceOnUse' x='45' y='125'><rect width='45' height='9' fill='%23aa825a'/><path d='M5 9h3v28h-3zM37 9h3v28h-3z' fill='%23505050'/></pattern></defs><rect width='400' height='250' fill='%23b4b9be'/><rect x='0' y='180' width='400' height='70' fill='%23785f46'/><rect x='90' y='30' width='220' height='70' fill='%231e4632'/><rect x='150' y='55' width='100' height='10' fill='%23ddd'/><rect x='165' y='72' width='70' height='5' fill='%23ddd'/><rect x='40' y='125' width='340' height='66' fill='url(%23p)'/></svg>"
+                         alt="Lecture Hall"
+                         loading="lazy"
+                         onerror="this.style.display='none'">
+
+                    <div class="image-overlay"></div>
+                    <span class="place-number">02</span>
+                </div>
+
+                <div class="place-content">
+                    <h2>Lecture Hall</h2>
+                    <p>
+                        Classrooms, lecture equipment and learning facilities.
+                    </p>
+                    <div class="select-place">
+                        <span>REPORT A PROBLEM</span>
+                        <span class="arrow">→</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- 3. Restrooms -->
+            <a class="place-card"
+               href="complaint.html?location=Restrooms">
+
+                <div class="image-container">
+                    <img src="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 250'><defs><pattern id='p' width='90' height='125' patternUnits='userSpaceOnUse' x='35' y='50'><rect width='60' height='125' fill='%23fafafa'/><ellipse cx='30' cy='65' rx='13' ry='15' fill='%23ddd'/><rect x='25' y='30' width='10' height='8' fill='%2396aab9'/></pattern></defs><rect width='400' height='250' fill='%23d5e1ea'/><rect x='0' y='175' width='400' height='75' fill='%23aab9c3'/><rect x='0' y='30' width='400' height='5' fill='%236ea0be'/><rect x='35' y='50' width='360' height='125' fill='url(%23p)'/></svg>"
+                         alt="Restrooms"
+                         loading="lazy"
+                         onerror="this.style.display='none'">
+
+                    <div class="image-overlay"></div>
+                    <span class="place-number">03</span>
+                </div>
+
+                <div class="place-content">
+                    <h2>Restrooms</h2>
+                    <p>
+                        Toilets, sinks, water supply and cleanliness.
+                    </p>
+                    <div class="select-place">
+                        <span>REPORT A PROBLEM</span>
+                        <span class="arrow">→</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- 4. Mosque -->
+            <a class="place-card"
+               href="complaint.html?location=Mosque">
+
+                <div class="image-container">
+                    <img src="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 250'><rect width='400' height='250' fill='%23fbd29a'/><rect x='0' y='200' width='400' height='50' fill='%23beaa78'/><rect x='110' y='125' width='180' height='75' fill='%23f5f5f0'/><path d='M150 125a50 50 0 0 1 100 0z' fill='%23288c78'/><rect x='150' y='115' width='100' height='10' fill='%23288c78'/><rect x='199' y='48' width='3' height='18' fill='%23ca3'/><rect x='65' y='60' width='11' height='140' fill='%23f0f0eb'/><rect x='325' y='60' width='11' height='140' fill='%23f0f0eb'/><path d='M63 60h15l-7-25zM323 60h15l-7-25z' fill='%23288c78'/><path d='M135 155h25v45h-25zM185 155h25v45h-25zM235 155h25v45h-25z' fill='%233c6e78'/></svg>"
+                         alt="Mosque"
+                         loading="lazy"
+                         onerror="this.style.display='none'">
+
+                    <div class="image-overlay"></div>
+                    <span class="place-number">04</span>
+                </div>
+
+                <div class="place-content">
+                    <h2>Mosque</h2>
+                    <p>
+                        Prayer area, lighting and mosque facilities.
+                    </p>
+                    <div class="select-place">
+                        <span>REPORT A PROBLEM</span>
+                        <span class="arrow">→</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- 5. Food Hall -->
+            <a class="place-card"
+               href="complaint.html?location=Food%20Hall">
+
+                <div class="image-container">
+                    <img src="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 250'><defs><pattern id='p' width='92' height='55' patternUnits='userSpaceOnUse' x='30' y='120'><rect width='60' height='7' fill='%23f0e6d7'/><path d='M5 7h3v30h-3zM52 7h3v30h-3z' fill='%235a4632'/><ellipse cx='30' cy='-3' rx='18' ry='5' fill='%23dc5a3c'/></pattern><pattern id='l' width='100' height='35' patternUnits='userSpaceOnUse' x='35' y='0'><path d='M15 0h2v35h-2z' fill='%23444'/><path d='M0 35h32l-7-10h-18z' fill='%23fd6'/></pattern></defs><rect width='400' height='250' fill='%23e6d0aa'/><rect x='0' y='160' width='400' height='90' fill='%23967350'/><rect x='0' y='0' width='400' height='35' fill='url(%23l)'/><rect x='30' y='120' width='368' height='100' fill='url(%23p)'/></svg>"
+                         alt="Food Hall"
+                         loading="lazy"
+                         onerror="this.style.display='none'">
+
+                    <div class="image-overlay"></div>
+                    <span class="place-number">05</span>
+                </div>
+
+                <div class="place-content">
+                    <h2>Food Hall</h2>
+                    <p>
+                        Dining area, tables, chairs and food hall facilities.
+                    </p>
+                    <div class="select-place">
+                        <span>REPORT A PROBLEM</span>
+                        <span class="arrow">→</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- 6. Workshops and Laboratories -->
+            <a class="place-card"
+               href="complaint.html?location=Workshops%20and%20Laboratories">
+
+                <div class="image-container">
+                    <img src="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 250'><defs><pattern id='p' width='80' height='10' patternUnits='userSpaceOnUse' x='30' y='20'><rect width='45' height='7' fill='%23fafadc'/></pattern></defs><rect width='400' height='250' fill='%23484e57'/><rect x='0' y='190' width='400' height='60' fill='%234b4e55'/><rect x='0' y='20' width='400' height='10' fill='url(%23p)'/><rect x='40' y='100' width='110' height='90' fill='%23e68c1e'/><rect x='50' y='112' width='90' height='32' fill='%233c4650'/><rect x='170' y='130' width='110' height='60' fill='%233c6eaa'/><rect x='185' y='108' width='15' height='22' fill='%233c6eaa'/><rect x='195' y='100' width='55' height='12' fill='%233c6eaa'/><rect x='300' y='75' width='60' height='115' fill='%23b43232'/><circle cx='330' cy='110' r='18' fill='%2328282d'/></svg>"
+                         alt="Workshops and Laboratories"
+                         loading="lazy"
+                         onerror="this.style.display='none'">
+
+                    <div class="image-overlay"></div>
+                    <span class="place-number">06</span>
+                </div>
+
+                <div class="place-content">
+                    <h2>Workshops and Laboratories</h2>
+                    <p>
+                        Workshop equipment, laboratory tools and safety facilities.
+                    </p>
+                    <div class="select-place">
+                        <span>REPORT A PROBLEM</span>
+                        <span class="arrow">→</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- 7. Outdoor Areas and Parking -->
+            <a class="place-card"
+               href="complaint.html?location=Outdoor%20Areas%20and%20Parking">
+
+                <div class="image-container">
+                    <img src="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 250'><defs><pattern id='p' width='55' height='60' patternUnits='userSpaceOnUse' x='20' y='190'><rect width='3' height='60' fill='%23fff'/></pattern><g id='c'><rect width='55' height='30' rx='6'/><rect x='10' y='-15' width='35' height='17' rx='5'/><circle cx='13' cy='29' r='6' fill='%23111'/><circle cx='43' cy='29' r='6' fill='%23111'/></g></defs><rect width='400' height='250' fill='%2399c8ee'/><rect x='0' y='150' width='400' height='100' fill='%2350555a'/><rect x='0' y='150' width='400' height='3' fill='%23ddd'/><rect x='20' y='190' width='360' height='60' fill='url(%23p)'/><use href='%23c' x='35' y='195' fill='%23c83232'/><use href='%23c' x='135' y='195' fill='%23325aaa'/><use href='%23c' x='235' y='195' fill='%23e6e6e6'/><use href='%23c' x='320' y='195' fill='%233c3c41'/><rect x='75' y='75' width='7' height='75' fill='%23644628'/><rect x='280' y='75' width='7' height='75' fill='%23644628'/><circle cx='78' cy='55' r='30' fill='%23328241'/><circle cx='283' cy='55' r='30' fill='%23328241'/></svg>"
+                         alt="Outdoor Areas and Parking"
+                         loading="lazy"
+                         onerror="this.style.display='none'">
+
+                    <div class="image-overlay"></div>
+                    <span class="place-number">07</span>
+                </div>
+
+                <div class="place-content">
+                    <h2>Outdoor Areas and Parking</h2>
+                    <p>
+                        Parking spaces, pathways, outdoor lighting and grounds.
+                    </p>
+                    <div class="select-place">
+                        <span>REPORT A PROBLEM</span>
+                        <span class="arrow">→</span>
+                    </div>
+                </div>
+            </a>
+
+            <!-- 8. Student Common Areas -->
+            <a class="place-card"
+               href="complaint.html?location=Student%20Common%20Areas">
+
+                <div class="image-container">
+                    <img src="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 250'><defs><pattern id='p' width='85' height='40' patternUnits='userSpaceOnUse' x='65' y='128'><circle cx='22' cy='0' r='8' fill='%23ebbe96'/><rect x='12' y='10' width='20' height='12' fill='%233c78c8'/><rect y='22' width='45' height='8' fill='%23aa7846'/><path d='M4 30h3v18h-3zM38 30h3v18h-3z' fill='%235a3c28'/></pattern></defs><rect width='400' height='250' fill='%23b4d5ef'/><rect x='0' y='180' width='400' height='70' fill='%236ea05f'/><rect x='30' y='100' width='340' height='16' fill='%23966440'/><rect x='40' y='116' width='5' height='64' fill='%23644628'/><rect x='190' y='116' width='5' height='64' fill='%23644628'/><rect x='350' y='116' width='5' height='64' fill='%23644628'/><rect x='65' y='128' width='340' height='52' fill='url(%23p)'/><circle cx='10' cy='95' r='40' fill='%23328241'/><circle cx='390' cy='90' r='42' fill='%23328241'/></svg>"
+                         alt="Student Common Areas"
+                         loading="lazy"
+                         onerror="this.style.display='none'">
+
+                    <div class="image-overlay"></div>
+                    <span class="place-number">08</span>
+                </div>
+
+                <div class="place-content">
+                    <h2>Student Common Areas</h2>
+                    <p>
+                        Shared student spaces, seating and common facilities.
+                    </p>
+                    <div class="select-place">
+                        <span>REPORT A PROBLEM</span>
+                        <span class="arrow">→</span>
+                    </div>
+                </div>
+            </a>
+
+        </section>
+
+        <section class="bottom-note">
+            <h2>Help Us Improve Our Campus</h2>
+            <p>
+                Found damaged equipment or a facility that needs attention?
+                Select the relevant location and complete the complaint form
+                so the issue can be reported.
+            </p>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>
+            &copy; 2026 <span>TVETMARA Lumut</span> |
+            Complaint Management System
+        </p>
+        <p>Campus Gallery • Report • Improve</p>
+    </footer>
+
+</body>
+</html>

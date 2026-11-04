@@ -1,0 +1,688 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Home | TVETMARA Lumut Complaint System</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        :root {
+            --black: #05090f;
+            --cyan: #00e5ff;
+            --cyan-soft: #b8f8ff;
+            --panel: rgba(5, 12, 21, 0.90);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Arial, sans-serif;
+            background-color: var(--black);
+            color: var(--cyan-soft);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            isolation: isolate;
+        }
+
+        /* Animated IT grid background */
+        body::before {
+            content: "";
+            position: fixed;
+            inset: -45%;
+            z-index: -3;
+            pointer-events: none;
+            background-image:
+                linear-gradient(
+                    rgba(0, 229, 255, 0.12) 1px,
+                    transparent 1px
+                ),
+                linear-gradient(
+                    90deg,
+                    rgba(0, 229, 255, 0.12) 1px,
+                    transparent 1px
+                );
+            background-size: 52px 52px;
+            transform: perspective(560px) rotateX(58deg) scale(1.8);
+            transform-origin: center;
+            animation: gridDrift 16s linear infinite;
+            mask-image: linear-gradient(
+                to bottom,
+                transparent 0%,
+                black 30%,
+                black 78%,
+                transparent 100%
+            );
+        }
+
+        /* Moving cyan light */
+        body::after {
+            content: "";
+            position: fixed;
+            inset: -20%;
+            z-index: -4;
+            pointer-events: none;
+            background:
+                radial-gradient(
+                    ellipse at 18% 22%,
+                    rgba(0, 229, 255, 0.20),
+                    transparent 32%
+                ),
+                radial-gradient(
+                    ellipse at 82% 72%,
+                    rgba(0, 229, 255, 0.14),
+                    transparent 34%
+                ),
+                var(--black);
+            animation: glowShift 10s ease-in-out infinite alternate;
+        }
+
+        @keyframes gridDrift {
+            from {
+                background-position: 0 0;
+            }
+
+            to {
+                background-position: 0 208px;
+            }
+        }
+
+        @keyframes glowShift {
+            0% {
+                transform: translate3d(-2%, -1%, 0) scale(1);
+            }
+
+            100% {
+                transform: translate3d(2%, 1%, 0) scale(1.04);
+            }
+        }
+
+        /* Floating programming symbols */
+        .petals {
+            position: fixed;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .petal {
+            position: absolute;
+            bottom: -60px;
+            color: var(--cyan);
+            font-family: Consolas, monospace;
+            font-size: 21px;
+            font-weight: bold;
+            opacity: 0;
+            text-shadow: 0 0 12px rgba(0, 229, 255, 0.9);
+            animation: floatUp linear infinite;
+        }
+
+        .petal:nth-child(1) {
+            left: 5%;
+            animation-duration: 13s;
+        }
+
+        .petal:nth-child(2) {
+            left: 18%;
+            animation-duration: 16s;
+            animation-delay: 3s;
+            font-size: 16px;
+        }
+
+        .petal:nth-child(3) {
+            left: 33%;
+            animation-duration: 14s;
+            animation-delay: 5s;
+        }
+
+        .petal:nth-child(4) {
+            left: 48%;
+            animation-duration: 17s;
+            animation-delay: 1s;
+            font-size: 18px;
+        }
+
+        .petal:nth-child(5) {
+            left: 63%;
+            animation-duration: 12s;
+            animation-delay: 4s;
+        }
+
+        .petal:nth-child(6) {
+            left: 78%;
+            animation-duration: 18s;
+            animation-delay: 2s;
+            font-size: 25px;
+        }
+
+        .petal:nth-child(7) {
+            left: 92%;
+            animation-duration: 15s;
+            animation-delay: 6s;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) translateX(0) rotate(0deg);
+                opacity: 0;
+            }
+
+            12% {
+                opacity: 0.8;
+            }
+
+            50% {
+                transform: translate(35px, -50vh) rotate(180deg);
+            }
+
+            90% {
+                opacity: 0.65;
+            }
+
+            100% {
+                transform: translate(-25px, -110vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Navigation bar */
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background: rgba(5, 12, 21, 0.94);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            padding: 17px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            border-bottom: 1px solid rgba(0, 229, 255, 0.35);
+            box-shadow: 0 4px 24px rgba(0, 229, 255, 0.08);
+        }
+
+        .logo {
+            color: var(--cyan);
+            font-size: 19px;
+            font-weight: 800;
+            letter-spacing: 0.6px;
+            text-shadow: 0 0 13px rgba(0, 229, 255, 0.35);
+        }
+
+        nav a {
+            display: inline-block;
+            color: var(--cyan-soft);
+            text-decoration: none;
+            margin-left: 18px;
+            font-size: 13px;
+            font-weight: bold;
+            transition: color 0.25s ease,
+                        text-shadow 0.25s ease;
+        }
+
+        nav a:hover {
+            color: var(--cyan);
+            text-shadow: 0 0 12px rgba(0, 229, 255, 0.65);
+        }
+
+        /* Welcome section */
+        .hero {
+            text-align: center;
+            padding: 95px 20px 78px;
+            max-width: 1000px;
+            margin: 0 auto;
+            animation: riseIn 0.8s ease both;
+        }
+
+        @keyframes riseIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-tag {
+            display: inline-block;
+            padding: 8px 14px;
+            margin-bottom: 18px;
+            border: 1px solid rgba(0, 229, 255, 0.42);
+            border-radius: 30px;
+            background: rgba(0, 229, 255, 0.06);
+            color: var(--cyan);
+            font-size: 12px;
+            font-weight: bold;
+            letter-spacing: 1.4px;
+        }
+
+        .hero h1 {
+            color: var(--cyan);
+            font-size: clamp(32px, 5vw, 48px);
+            line-height: 1.2;
+            margin: 0 0 18px;
+            text-shadow: 0 0 24px rgba(0, 229, 255, 0.19);
+        }
+
+        .hero p {
+            color: #c2d7df;
+            font-size: 16px;
+            line-height: 1.9;
+            max-width: 700px;
+            margin: 0 auto 28px;
+        }
+
+        /* Main button */
+        .button {
+            display: inline-block;
+            background: var(--cyan);
+            color: var(--black);
+            padding: 14px 23px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 800;
+            margin: 8px;
+            border: 1px solid var(--cyan);
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.25s ease;
+        }
+
+        .button:hover {
+            background: var(--cyan-soft);
+            transform: translateY(-3px);
+            box-shadow: 0 0 23px rgba(0, 229, 255, 0.25);
+        }
+
+        /* Features section */
+        .section {
+            padding: 38px 7% 72px;
+            text-align: center;
+        }
+
+        .section h2 {
+            color: var(--cyan);
+            font-size: 28px;
+            margin-bottom: 12px;
+            text-shadow: 0 0 14px rgba(0, 229, 255, 0.14);
+        }
+
+        .section-intro {
+            color: #b7cbd4;
+            line-height: 1.7;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 22px;
+            margin-top: 32px;
+        }
+
+        /* Glowing information card */
+        .card {
+            background: var(--panel);
+            padding: 30px 23px;
+            border-radius: 16px;
+            border: 1px solid rgba(0, 229, 255, 0.28);
+            box-shadow: 0 8px 28px rgba(0, 0, 0, 0.22);
+            transition: transform 0.3s ease,
+                        border-color 0.3s ease,
+                        box-shadow 0.3s ease;
+            animation: riseIn 0.8s ease both;
+        }
+
+        .card:hover {
+            transform: translateY(-7px);
+            border-color: var(--cyan);
+            box-shadow: 0 0 25px rgba(0, 229, 255, 0.12);
+        }
+
+        .card .emoji {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 65px;
+            height: 65px;
+            border: 1px solid rgba(0, 229, 255, 0.45);
+            border-radius: 17px;
+            background: rgba(0, 229, 255, 0.07);
+            color: var(--cyan);
+            font-family: Consolas, monospace;
+            font-size: 25px;
+            font-weight: bold;
+            margin-bottom: 6px;
+            text-shadow: 0 0 12px rgba(0, 229, 255, 0.35);
+        }
+
+        .card h3 {
+            color: var(--cyan);
+            font-size: 19px;
+        }
+
+        .card p {
+            color: #c2d3da;
+            line-height: 1.8;
+            font-size: 14px;
+            min-height: 75px;
+        }
+
+        .card a {
+            display: inline-block;
+            color: var(--cyan);
+            font-weight: 800;
+            text-decoration: none;
+            margin-top: 8px;
+        }
+
+        .card a:hover {
+            color: var(--cyan-soft);
+            text-shadow: 0 0 10px rgba(0, 229, 255, 0.45);
+        }
+
+        /* Background music button */
+        .music-button {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            z-index: 100;
+            padding: 12px 18px;
+            border: 1px solid var(--cyan);
+            border-radius: 30px;
+            background: rgba(5, 12, 21, 0.95);
+            color: var(--cyan);
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 0 18px rgba(0, 229, 255, 0.18);
+            transition: all 0.25s ease;
+        }
+
+        .music-button:hover {
+            background: var(--cyan);
+            color: var(--black);
+            box-shadow: 0 0 24px rgba(0, 229, 255, 0.4);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 24px 15px;
+            background: rgba(5, 12, 21, 0.95);
+            color: #b8d1da;
+            font-size: 13px;
+            border-top: 1px solid rgba(0, 229, 255, 0.3);
+        }
+
+        footer p {
+            margin: 6px 0;
+        }
+
+        /* Responsive design */
+        @media (max-width: 850px) {
+            nav {
+                justify-content: center;
+                text-align: center;
+            }
+
+            nav a {
+                margin: 7px 9px;
+            }
+
+            .cards {
+                grid-template-columns: 1fr;
+                max-width: 520px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .card p {
+                min-height: auto;
+            }
+
+            .hero {
+                padding-top: 70px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            nav {
+                padding: 16px 5%;
+            }
+
+            .logo {
+                font-size: 17px;
+            }
+
+            .hero {
+                padding: 65px 18px 48px;
+            }
+
+            .hero p {
+                font-size: 14px;
+            }
+
+            .section {
+                padding-left: 5%;
+                padding-right: 5%;
+            }
+
+            .button {
+                padding: 13px 17px;
+            }
+
+            .music-button {
+                right: 12px;
+                bottom: 12px;
+            }
+        }
+
+        /* Accessibility: reduce animation when requested */
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                scroll-behavior: auto !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Background music -->
+    <audio id="backgroundMusic" loop>
+    <source src="sky-high.mp3" type="audio/mpeg">
+</audio>
+
+<button id="musicButton" type="button">♫ Play Music</button>
+
+    <!-- Floating programming symbols -->
+    <div class="petals" aria-hidden="true">
+        <span class="petal">&lt;/&gt;</span>
+        <span class="petal">01</span>
+        <span class="petal">{ }</span>
+        <span class="petal">010</span>
+        <span class="petal">01</span>
+        <span class="petal">[ ]</span>
+        <span class="petal">&lt;code&gt;</span>
+    </div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">&lt;/&gt; TVETMARA Lumut</div>
+
+        <div>
+            <a href="home.html">Home</a>
+            <a href="campus-gallery.html"
+               onclick="openCampusGallery(event)">Campus Gallery</a>
+            <a href="index.html">Log Out</a>
+        </div>
+    </nav>
+
+    <!-- Welcome section -->
+    <section class="hero">
+
+        <div class="hero-tag">CAMPUS SUPPORT SYSTEM</div>
+
+        <h1>Welcome to Our Campus</h1>
+
+        <p>
+            <strong>TVETMARA Lumut Complaint Management System</strong>
+            helps students explore campus locations and learn more
+            about the facilities around campus.
+            Together, we can support a safer, cleaner,
+            and more comfortable learning environment.
+        </p>
+
+        <a href="campus-gallery.html"
+           class="button"
+           onclick="openCampusGallery(event)">
+            Explore Campus Gallery →
+        </a>
+
+    </section>
+
+    <!-- Campus Gallery section -->
+    <section class="section">
+
+        <h2>Explore Our Campus</h2>
+
+        <p class="section-intro">
+            Discover the different facilities and locations around TVETMARA Lumut.
+        </p>
+
+        <div class="cards">
+
+            <div class="card">
+
+                <div class="emoji">03</div>
+
+                <h3>Campus Gallery</h3>
+
+                <p>
+                    Explore campus areas such as the dormitory,
+                    lecture rooms, restrooms, mosque, food hall,
+                    workshops and laboratories, outdoor areas,
+                    and student common areas.
+                </p>
+
+                <a href="campus-gallery.html"
+                   onclick="openCampusGallery(event)">
+                    Explore Locations →
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&lt;/&gt; TVETMARA Lumut Complaint Management System</p>
+        <p>Working Together for a Better Campus</p>
+    </footer>
+
+    <!-- Background music controls -->
+    <button type="button"
+            id="musicButton"
+            class="music-button"
+            onclick="toggleMusic()"
+            aria-pressed="false">
+        ♫ Play Music
+    </button>
+
+    <!-- JavaScript -->
+    
+<script>
+const music = document.getElementById("backgroundMusic");
+const button = document.getElementById("musicButton");
+
+music.volume = 0.3;
+
+function updateButton() {
+    button.textContent = music.paused
+        ? "♫ Play Music"
+        : "♫ Pause Music";
+}
+
+// Restore the last playback position.
+const savedTime = sessionStorage.getItem("skyHighTime");
+const wasPlaying = sessionStorage.getItem("skyHighPlaying");
+
+music.addEventListener("loadedmetadata", async function () {
+    if (savedTime !== null) {
+        music.currentTime = Math.min(
+            Number(savedTime),
+            Math.max(0, music.duration - 0.1)
+        );
+    }
+
+    if (wasPlaying === "true") {
+        try {
+            await music.play();
+        } catch (error) {
+            console.log("Browser requires interaction to play music.");
+        }
+    }
+
+    updateButton();
+});
+
+// Save playback position while the song plays.
+music.addEventListener("timeupdate", function () {
+    sessionStorage.setItem("skyHighTime", music.currentTime);
+});
+
+// Remember playback state when navigating away.
+window.addEventListener("pagehide", function () {
+    sessionStorage.setItem("skyHighTime", music.currentTime);
+    sessionStorage.setItem(
+        "skyHighPlaying",
+        String(!music.paused)
+    );
+});
+
+// Play or pause the music.
+button.addEventListener("click", async function () {
+    if (music.paused) {
+        try {
+            await music.play();
+            sessionStorage.setItem("skyHighPlaying", "true");
+        } catch (error) {
+            console.log("Unable to play audio:", error);
+        }
+    } else {
+        music.pause();
+        sessionStorage.setItem("skyHighPlaying", "false");
+    }
+
+    updateButton();
+});
+
+music.addEventListener("play", updateButton);
+music.addEventListener("pause", updateButton);
+</script>
+
+
+</body>
+</html>

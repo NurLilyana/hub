@@ -1,0 +1,764 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>TVETMARA Lumut - Complaint Form</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        :root {
+            --black: #05090f;
+            --cyan: #00e5ff;
+            --cyan-soft: #b8f8ff;
+            --panel: rgba(5, 12, 21, 0.92);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: var(--black);
+            margin: 0;
+            padding: 30px 15px 45px;
+            color: var(--cyan-soft);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            isolation: isolate;
+        }
+
+        /* Animated IT grid background */
+        body::before {
+            content: "";
+            position: fixed;
+            inset: -45%;
+            z-index: -3;
+            pointer-events: none;
+            background-image:
+                linear-gradient(
+                    rgba(0, 229, 255, 0.12) 1px,
+                    transparent 1px
+                ),
+                linear-gradient(
+                    90deg,
+                    rgba(0, 229, 255, 0.12) 1px,
+                    transparent 1px
+                );
+            background-size: 52px 52px;
+            transform: perspective(560px) rotateX(58deg) scale(1.8);
+            transform-origin: center;
+            animation: gridDrift 16s linear infinite;
+            mask-image: linear-gradient(
+                to bottom,
+                transparent 0%,
+                black 30%,
+                black 78%,
+                transparent 100%
+            );
+        }
+
+        /* Moving cyan glow */
+        body::after {
+            content: "";
+            position: fixed;
+            inset: -20%;
+            z-index: -4;
+            pointer-events: none;
+            background:
+                radial-gradient(
+                    ellipse at 18% 22%,
+                    rgba(0, 229, 255, 0.20),
+                    transparent 32%
+                ),
+                radial-gradient(
+                    ellipse at 82% 72%,
+                    rgba(0, 229, 255, 0.14),
+                    transparent 34%
+                ),
+                var(--black);
+            animation: glowShift 10s ease-in-out infinite alternate;
+        }
+
+        @keyframes gridDrift {
+            from {
+                background-position: 0 0;
+            }
+
+            to {
+                background-position: 0 208px;
+            }
+        }
+
+        @keyframes glowShift {
+            0% {
+                transform: translate3d(-2%, -1%, 0) scale(1);
+            }
+
+            100% {
+                transform: translate3d(2%, 1%, 0) scale(1.04);
+            }
+        }
+
+        /* Floating programming symbols */
+        .petals {
+            position: fixed;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .petal {
+            position: absolute;
+            bottom: -60px;
+            color: var(--cyan);
+            font-family: Consolas, monospace;
+            font-size: 21px;
+            font-weight: bold;
+            opacity: 0;
+            text-shadow: 0 0 12px rgba(0, 229, 255, 0.9);
+            animation: floatUp linear infinite;
+        }
+
+        .petal:nth-child(1) {
+            left: 5%;
+            animation-duration: 13s;
+        }
+
+        .petal:nth-child(2) {
+            left: 18%;
+            animation-duration: 16s;
+            animation-delay: 3s;
+            font-size: 16px;
+        }
+
+        .petal:nth-child(3) {
+            left: 33%;
+            animation-duration: 14s;
+            animation-delay: 5s;
+        }
+
+        .petal:nth-child(4) {
+            left: 48%;
+            animation-duration: 17s;
+            animation-delay: 1s;
+            font-size: 18px;
+        }
+
+        .petal:nth-child(5) {
+            left: 63%;
+            animation-duration: 12s;
+            animation-delay: 4s;
+        }
+
+        .petal:nth-child(6) {
+            left: 78%;
+            animation-duration: 18s;
+            animation-delay: 2s;
+            font-size: 25px;
+        }
+
+        .petal:nth-child(7) {
+            left: 92%;
+            animation-duration: 15s;
+            animation-delay: 6s;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) translateX(0) rotate(0deg);
+                opacity: 0;
+            }
+
+            12% {
+                opacity: 0.8;
+            }
+
+            50% {
+                transform: translate(35px, -50vh) rotate(180deg);
+            }
+
+            90% {
+                opacity: 0.65;
+            }
+
+            100% {
+                transform: translate(-25px, -110vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin: 20px auto 35px;
+            animation: appear 0.8s ease both;
+        }
+
+        @keyframes appear {
+            from {
+                opacity: 0;
+                transform: translateY(18px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 65px;
+            height: 55px;
+            margin-bottom: 14px;
+            border: 1px solid rgba(0, 229, 255, 0.65);
+            border-radius: 14px;
+            background: rgba(0, 229, 255, 0.07);
+            color: var(--cyan);
+            font-family: Consolas, monospace;
+            font-size: 25px;
+            font-weight: bold;
+            text-shadow: 0 0 14px rgba(0, 229, 255, 0.8);
+            box-shadow: 0 0 20px rgba(0, 229, 255, 0.10);
+            animation: logoPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes logoPulse {
+            0%, 100% {
+                transform: translateY(0);
+                box-shadow: 0 0 12px rgba(0, 229, 255, 0.12);
+            }
+
+            50% {
+                transform: translateY(-4px);
+                box-shadow: 0 0 24px rgba(0, 229, 255, 0.28);
+            }
+        }
+
+        .header h1,
+        .header h2 {
+            color: var(--cyan);
+            text-shadow: 0 0 16px rgba(0, 229, 255, 0.18);
+        }
+
+        .header h1 {
+            font-size: 34px;
+            margin: 0 0 8px;
+            letter-spacing: 1.5px;
+        }
+
+        .header h2 {
+            font-size: 22px;
+            margin: 0;
+            font-weight: 600;
+        }
+
+        .header p {
+            color: #b8dce4;
+            font-size: 14px;
+            letter-spacing: 0.5px;
+        }
+
+        /* Main complaint form card */
+        .form-container {
+            position: relative;
+            background: var(--panel);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            max-width: 650px;
+            margin: auto;
+            padding: 32px;
+            border-radius: 20px;
+            border: 1px solid rgba(0, 229, 255, 0.42);
+            box-shadow:
+                0 0 0 1px rgba(0, 229, 255, 0.08),
+                0 0 28px rgba(0, 229, 255, 0.10),
+                0 24px 65px rgba(0, 0, 0, 0.4);
+            animation: appear 0.9s ease both;
+        }
+
+        .form-container::before {
+            content: "";
+            position: absolute;
+            height: 2px;
+            top: -1px;
+            left: 15%;
+            right: 15%;
+            background: var(--cyan);
+            box-shadow: 0 0 14px var(--cyan);
+            border-radius: 50%;
+        }
+
+        .form-container h2 {
+            text-align: center;
+            color: var(--cyan);
+            font-size: 27px;
+            margin-top: 3px;
+            text-shadow: 0 0 14px rgba(0, 229, 255, 0.15);
+        }
+
+        .intro {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #c2d7df;
+            font-size: 14px;
+            line-height: 1.8;
+        }
+
+        /* Form fields */
+        label {
+            display: block;
+            font-weight: bold;
+            margin-top: 20px;
+            margin-bottom: 8px;
+            color: var(--cyan-soft);
+            font-size: 14px;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #23404b;
+            border-radius: 10px;
+            box-sizing: border-box;
+            font-size: 14px;
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: #08111a;
+            color: #e9fcff;
+            transition: border-color 0.25s ease,
+                        box-shadow 0.25s ease;
+        }
+
+        input::placeholder,
+        textarea::placeholder {
+            color: #8ca3ad;
+        }
+
+        select {
+            cursor: pointer;
+        }
+
+        select option {
+            background: #08111a;
+            color: #e9fcff;
+        }
+
+        textarea {
+            height: 120px;
+            resize: vertical;
+            line-height: 1.6;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--cyan);
+            box-shadow:
+                0 0 0 3px rgba(0, 229, 255, 0.10),
+                0 0 14px rgba(0, 229, 255, 0.08);
+        }
+
+        /* Photo upload section */
+        .photo-section {
+            margin-top: 25px;
+            padding: 20px;
+            background: rgba(0, 229, 255, 0.035);
+            border: 1px dashed rgba(0, 229, 255, 0.65);
+            border-radius: 14px;
+        }
+
+        .photo-section label {
+            margin-top: 0;
+            color: var(--cyan);
+            font-size: 15px;
+        }
+
+        .photo-help {
+            font-size: 13px;
+            color: #b8cbd3;
+            line-height: 1.7;
+        }
+
+        input[type="file"] {
+            padding: 10px;
+            font-size: 12px;
+            cursor: pointer;
+            background: rgba(5, 12, 21, 0.8);
+        }
+
+        input[type="file"]::file-selector-button {
+            padding: 9px 12px;
+            margin-right: 10px;
+            border: 1px solid var(--cyan);
+            border-radius: 7px;
+            background: var(--cyan);
+            color: var(--black);
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        input[type="file"]::file-selector-button:hover {
+            background: var(--cyan-soft);
+        }
+
+        #photoPreview {
+            display: none;
+            width: 100%;
+            max-height: 300px;
+            object-fit: contain;
+            margin-top: 15px;
+            border-radius: 10px;
+            background: #08111a;
+            border: 1px solid rgba(0, 229, 255, 0.35);
+        }
+
+        #photoName {
+            font-size: 13px;
+            color: var(--cyan-soft);
+            overflow-wrap: anywhere;
+            line-height: 1.6;
+        }
+
+        .remove-button {
+            display: none;
+            width: 100%;
+            padding: 11px;
+            margin-top: 10px;
+            background: transparent;
+            color: var(--cyan);
+            border: 1px solid rgba(0, 229, 255, 0.5);
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.25s ease;
+        }
+
+        .remove-button:hover {
+            background: rgba(0, 229, 255, 0.1);
+            border-color: var(--cyan);
+        }
+
+        /* Submit button */
+        .submit-button {
+            width: 100%;
+            background: var(--cyan);
+            color: var(--black);
+            padding: 15px;
+            margin-top: 25px;
+            border: 1px solid var(--cyan);
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .submit-button:hover {
+            background: var(--cyan-soft);
+            transform: translateY(-2px);
+            box-shadow: 0 0 22px rgba(0, 229, 255, 0.22);
+        }
+
+        .submit-button:active {
+            transform: scale(0.99);
+        }
+
+        .footer {
+            text-align: center;
+            color: #b8d1da;
+            margin-top: 25px;
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        /* Back to home link */
+        .back-home {
+            display: block;
+            width: fit-content;
+            margin: 25px auto 0;
+            color: var(--cyan);
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: bold;
+            transition: 0.25s ease;
+        }
+
+        .back-home:hover {
+            color: var(--cyan-soft);
+            text-shadow: 0 0 10px rgba(0, 229, 255, 0.4);
+        }
+
+        @media (max-width: 500px) {
+            body {
+                padding: 20px 12px 35px;
+            }
+
+            .form-container {
+                padding: 22px 18px;
+            }
+
+            .header h1 {
+                font-size: 27px;
+            }
+
+            .header h2 {
+                font-size: 19px;
+            }
+
+            .form-container h2 {
+                font-size: 23px;
+            }
+
+            .photo-section {
+                padding: 15px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                scroll-behavior: auto !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Floating programming symbols -->
+    <div class="petals" aria-hidden="true">
+        <span class="petal">&lt;/&gt;</span>
+        <span class="petal">01</span>
+        <span class="petal">{ }</span>
+        <span class="petal">010</span>
+        <span class="petal">01</span>
+        <span class="petal">[ ]</span>
+        <span class="petal">&lt;code&gt;</span>
+    </div>
+
+    <!-- Page header -->
+    <div class="header">
+
+        <div class="logo">&lt;/&gt;</div>
+
+        <h1>TVETMARA LUMUT</h1>
+
+        <h2>Complaint Management System</h2>
+
+        <p>♡ Together for a Better Campus ♡</p>
+
+    </div>
+
+    <!-- Complaint form -->
+    <div class="form-container">
+
+        <h2>Submit a Complaint</h2>
+
+        <p class="intro">
+            Please fill in the form below to report a problem on campus.
+        </p>
+
+        <form action="submit_complaint.php"
+              method="POST"
+              enctype="multipart/form-data">
+
+            <label for="student_name">Student Name</label>
+
+            <input
+                type="text"
+                id="student_name"
+                name="student_name"
+                placeholder="Enter your name"
+                required>
+
+            <label for="location">Location</label>
+
+            <select id="location" name="location" required>
+                <option value="Dormitory / Hostel" selected>
+                    Dormitory / Hostel
+                </option>
+
+                <option value="Lecture Room">
+                    Lecture Room
+                </option>
+
+                <option value="Restroom">
+                    Restroom
+                </option>
+
+                <option value="Mosque">
+                    Mosque
+                </option>
+
+                <option value="Workshop and Laboratories">
+                    Workshop and Laboratories
+                </option>
+
+                <option value="Outdoor Areas and Parking">
+                    Outdoor Areas and Parking
+                </option>
+
+                <option value="Student Common Areas">
+                    Student Common Areas
+                </option>
+            </select>
+
+            <label for="problem">Problem</label>
+
+            <input
+                type="text"
+                id="problem"
+                name="problem"
+                placeholder="Enter the problem"
+                required>
+
+            <label for="description">Description</label>
+
+            <textarea
+                id="description"
+                name="description"
+                placeholder="Describe the problem in detail..."></textarea>
+
+            <!-- Photo upload -->
+            <div class="photo-section">
+
+                <label for="complaint_photo">
+                    📷 Attach a Photo (Optional)
+                </label>
+
+                <p class="photo-help">
+                    Take a picture or choose an image of the problem.
+                    JPG, PNG or WEBP, up to 5 MB.
+                </p>
+
+                <input
+                    type="file"
+                    id="complaint_photo"
+                    name="complaint_photo"
+                    accept="image/jpeg,image/png,image/webp">
+
+                <img
+                    id="photoPreview"
+                    alt="Preview of selected complaint photo">
+
+                <p id="photoName" aria-live="polite"></p>
+
+                <button
+                    type="button"
+                    id="removePhoto"
+                    class="remove-button">
+                    Remove Photo
+                </button>
+
+            </div>
+
+            <label for="priority">Priority</label>
+
+            <select id="priority" name="priority">
+                <option value="Low">Low</option>
+                <option value="Normal" selected>Normal</option>
+                <option value="High">High</option>
+            </select>
+
+            <button type="submit" class="submit-button">
+                ➤ Submit Complaint
+            </button>
+
+        </form>
+
+        <p class="footer">
+            Your feedback helps us create a better TVETMARA Lumut.
+        </p>
+
+        <a href="home.html" class="back-home">
+            ← Back to Home
+        </a>
+
+    </div>
+
+    <script>
+        const photoInput = document.getElementById("complaint_photo");
+        const photoPreview = document.getElementById("photoPreview");
+        const photoName = document.getElementById("photoName");
+        const removePhoto = document.getElementById("removePhoto");
+
+        let previewURL = null;
+
+        photoInput.addEventListener("change", function () {
+            const photo = photoInput.files[0];
+
+            if (previewURL) {
+                URL.revokeObjectURL(previewURL);
+                previewURL = null;
+            }
+
+            photoPreview.style.display = "none";
+            photoPreview.removeAttribute("src");
+            photoName.textContent = "";
+            removePhoto.style.display = "none";
+
+            if (!photo) {
+                return;
+            }
+
+            const allowedTypes = [
+                "image/jpeg",
+                "image/png",
+                "image/webp"
+            ];
+
+            if (!allowedTypes.includes(photo.type)) {
+                alert("Please choose a JPG, PNG or WEBP image.");
+                photoInput.value = "";
+                return;
+            }
+
+            if (photo.size > 5 * 1024 * 1024) {
+                alert("Your photo must be 5 MB or smaller.");
+                photoInput.value = "";
+                return;
+            }
+
+            previewURL = URL.createObjectURL(photo);
+            photoPreview.src = previewURL;
+            photoPreview.style.display = "block";
+
+            photoName.textContent = "Selected: " + photo.name;
+            removePhoto.style.display = "block";
+        });
+
+        removePhoto.addEventListener("click", function () {
+            photoInput.value = "";
+
+            if (previewURL) {
+                URL.revokeObjectURL(previewURL);
+                previewURL = null;
+            }
+
+            photoPreview.removeAttribute("src");
+            photoPreview.style.display = "none";
+            photoName.textContent = "";
+            removePhoto.style.display = "none";
+        });
+    </script>
+
+</body>
+</html>
